@@ -1,2 +1,5 @@
 # react
-learn react one month
+
+### learn react one month
+
+### 今天是我第一天学习 开始到结束将近三个小时 感觉时间很快 虽然学的都是基础 但是能打好基础就是最棒的 加油 2020.05.08 22：59
