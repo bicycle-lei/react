@@ -7,7 +7,8 @@ import './App.css';
 // import Component from './Components/Component'
 // import Render from './Components/Render'
 // import Hoc from './Components/Hoc'
-import Setstate from './Components/Setstate'
+// import Setstate from './Components/Setstate'
+import Jsx from './Components/Jsx'
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
       {/* <Component/> */}
       {/* <Render/> */}
       {/* <Hoc/> */}
-      <Setstate/>
+      {/* <Setstate/> */}
+      <Jsx/>
     </div>
   );
 }
