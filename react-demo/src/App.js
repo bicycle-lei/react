@@ -8,7 +8,8 @@ import './App.css';
 // import Render from './Components/Render'
 // import Hoc from './Components/Hoc'
 // import Setstate from './Components/Setstate'
-import Jsx from './Components/Jsx'
+// import Jsx from './Components/Jsx'
+import Route from './Components/Route'
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
       {/* <Render/> */}
       {/* <Hoc/> */}
       {/* <Setstate/> */}
-      <Jsx/>
+      {/* <Jsx/> */}
+      <Route/>
     </div>
   );
 }

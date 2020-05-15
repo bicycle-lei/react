@@ -11,8 +11,11 @@ import React from 'react'
   避免不必要的重新渲染(shouldComponentUpdate(nextProps, nextState)) shouldComponentUpdate --> render 如果在这个函数中返回false render就不执行
   纯组件 PureComponent 自动实现了shouldComponentUpdate
   内部的比较方式是shallow compare 浅层对比
-  浅层对比 比较简单类型用的是全等比较 包括值和类型 比较引用类型时 只比较存储的指针地址
+  浅层对比 比较简单类型用的是全等比较 包括值和类型 比较引用类型时 只比较存储的指针地址 所以需要用新对象修改setState中的值
   
+  DOM Diff
+  只要state变化就重新渲染视图
+  理想状态 部分更新 只更新变化的地方
 */
 // class Hello extends React.Component {
 //   state = {
@@ -61,6 +64,9 @@ class Randomm extends React.Component {
     // return nextState.count !== this.state.count
     // 使用nextProps
   // }
+  // render方法的调用并不意味着浏览器中重新渲染
+  // rander方法要使用diff比较虚拟DOM是否有变化
+  // 如果有变化只更改变化的部分到页面
   render () {
     // console.log('render执行了')
     return (
