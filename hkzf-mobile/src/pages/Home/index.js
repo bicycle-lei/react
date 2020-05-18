@@ -62,7 +62,15 @@ export default class Home extends React.Component {
       </TabBar.Item>
     ))
   }
-
+  // 监听路由变化
+  componentDidUpdate (prevProps) {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      // 路由发生切换
+      this.setState({
+        selectedTab: this.props.location.pathname,
+      })
+    }
+  }
   render () {
     return (
       <div className="home">

@@ -7,4 +7,10 @@ html, body {
 
 * {
   box-sizing: border-box;
+  /* 去掉轮播图的错误警告  */
+  touch-action: pan-y;
+}
+
+h2, p {
+  margin: 0;
 }
