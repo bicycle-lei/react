@@ -12,9 +12,7 @@ import './index.css';
 import './assets/fonts/iconfont.css'
 
 ReactDOM.render(
-  <div>
-    <App />
-  </div>,
+  <App />,
   document.getElementById('root')
 );
 
