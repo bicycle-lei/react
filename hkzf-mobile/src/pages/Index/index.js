@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { getCurrentCity } from "../../utils"
 // 导入组件
 import { Carousel, Flex, Grid, WingBlank } from 'antd-mobile'
 import axios from 'axios'
@@ -81,19 +81,14 @@ export default class Index extends React.Component {
       }
     })
   } 
-  componentDidMount() {
+  async componentDidMount() {
     this.getSwipers()
     this.getGroups()
     this.getNews()
     // 通过IP定位获取当前城市名称
-    const curCity = new window.BMap.LocalCity()
-    curCity.get(async res => {
-      const result = await axios.get(`http://118.190.160.53:8009/area/info?name=${res.name}`)
-      this.setState(() => {
-        return {
-          curCityName: result.data.body.label
-        }
-      })
+    const curCity = await getCurrentCity()
+    this.setState({
+      curCityName: curCity.label
     })
   }
   // 渲染轮播图结构
