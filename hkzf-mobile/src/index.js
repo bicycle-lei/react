@@ -11,6 +11,8 @@ import './index.css';
 // 导入字体图标库
 import './assets/fonts/iconfont.css'
 
+import 'react-virtualized/styles.css'
+
 ReactDOM.render(
   <App />,
   document.getElementById('root')
