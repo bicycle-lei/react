@@ -1,8 +1,9 @@
 import React from 'react'
+import NavHeader from '../../components/NavHeader'
 import './index.scss'
 
 export default class Map extends React.Component {
-  componentDidMount () {
+  componentDidMount() {
     // 在react中使用全局对象要用window 否者eslint 报错
     const map = new window.BMap.Map('container')
     // 设置中心坐标
@@ -10,10 +11,11 @@ export default class Map extends React.Component {
     // 初始化地图
     map.centerAndZoom(point, 15)
   }
-  render () {
+  render() {
     return (
       <div className="map">
         {/* 地图容器 */}
+        <NavHeader>地图找房</NavHeader>
         <div id="container"></div>
       </div>
     )
