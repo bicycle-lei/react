@@ -5,9 +5,7 @@ import { getCurrentCity } from "../../utils"
 import { List, AutoSizer } from 'react-virtualized'
 import NavHeader from '../../components/NavHeader'
 
-import './index.scss'
-
-
+import styles from './index.module.css'
 const TITLE_HEIGHT = 36
 const NAME_HEIGHT = 50
 // 数据格式化的方法
@@ -96,12 +94,12 @@ export default class CityList extends React.Component {
     const { cityIndex, cityList } = this.state
     const letter = cityIndex[index]
     return (
-      <div key={key} style={style} className="city">
-        <div className="title">
+      <div key={key} style={style} className={styles.city}>
+        <div className={styles.title}>
           {formatCityIndex(letter)}
         </div>
         {
-          cityList[letter].map(item => <div className="name" key={item.value} onClick={() => this.changeCity(item)}>{item.label}</div>)
+          cityList[letter].map(item => <div className={styles.name} key={item.value} onClick={() => this.changeCity(item)}>{item.label}</div>)
         }
       </div>
     );
@@ -115,10 +113,10 @@ export default class CityList extends React.Component {
   renderCityIndex = () => {
     const { cityIndex, activeIndex } = this.state
     return cityIndex.map((item, index) =>
-      <li className="city-index-item" key={item} onClick={() => {
+      <li className={styles.cityIndexItem} key={item} onClick={() => {
         this.cityListComponent.current.scrollToRow(index)
       }}>
-        <span className={activeIndex === index ? 'index-active' : ''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
+        <span className={activeIndex === index ? styles.indexActive : ''}>{item === 'hot' ? '热' : item.toUpperCase()}</span>
       </li>
     )
   }
@@ -132,7 +130,7 @@ export default class CityList extends React.Component {
   }
   render() {
     return (
-      <div className="citylist">
+      <div className={styles.citylist}>
         <NavHeader>城市列表</NavHeader>
         {/* 城市列表 */}
         <AutoSizer>
@@ -151,7 +149,7 @@ export default class CityList extends React.Component {
           }
         </AutoSizer>
         {/* 右侧索引 */}
-        <ul className="city-index">
+        <ul className={styles.cityIndex}>
           {this.renderCityIndex()}
         </ul>
       </div>
