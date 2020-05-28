@@ -42,8 +42,7 @@ const navs = [
 ]
 // 获取地理位置信息
 navigator.geolocation.getCurrentPosition(position => {
-  console.log(1)
-  console.log('位置', position)
+
 })
 
 export default class Index extends React.Component {
@@ -56,7 +55,7 @@ export default class Index extends React.Component {
     curCityName: ''
   }
   // 轮播图出现问题是因为动态加载数据
-  async getSwipers () {
+  async getSwipers() {
     const res = await axios.get('http://118.190.160.53:8009/home/swiper')
     this.setState(() => {
       return {
@@ -65,22 +64,22 @@ export default class Index extends React.Component {
       }
     })
   }
-  async getGroups () {
+  async getGroups() {
     const res = await axios.get('http://118.190.160.53:8009/home/groups?area=88cff55c-aaa4-e2e0')
     this.setState(() => {
       return {
         groups: res.data.body
       }
     })
-  } 
-  async getNews () {
+  }
+  async getNews() {
     const res = await axios.get('http://118.190.160.53:8009/home/news?area=88cff55c-aaa4-e2e0')
     this.setState(() => {
       return {
         news: res.data.body
       }
     })
-  } 
+  }
   async componentDidMount() {
     this.getSwipers()
     this.getGroups()
@@ -92,9 +91,9 @@ export default class Index extends React.Component {
     })
   }
   // 渲染轮播图结构
-  renderSwipers () {
+  renderSwipers() {
     return this.state.swipers.map(item => (
-      <a 
+      <a
         key={item.id}
         href="http://itcast.cn"
         style={{
@@ -106,26 +105,26 @@ export default class Index extends React.Component {
         <img src={`http://118.190.160.53:8009${item.imgSrc}`} alt="" style={{
           width: '100%',
           verticalAlign: 'top'
-          }}/>
+        }} />
       </a>
     ))
   }
-  renderNavs () {
+  renderNavs() {
     return navs.map(item => (
       <Flex.Item key={item.id} onClick={() => this.props.history.push(item.path)}>
-        <img src={item.img} alt=""/>
+        <img src={item.img} alt="" />
         <h2>{item.title}</h2>
       </Flex.Item>
     ))
   }
-  renderNews () {
+  renderNews() {
     return this.state.news.map(item => (
       <div className="news-item" key={item.id}>
         <div className="imgwrap">
-          <img 
-          className="img"
-          src={`http://118.190.160.53:8009${item.imgSrc}`}
-          alt=""/>
+          <img
+            className="img"
+            src={`http://118.190.160.53:8009${item.imgSrc}`}
+            alt="" />
         </div>
         <Flex className="content" direction="column" justify="between">
           <h3 className="title">{item.title}</h3>
@@ -142,13 +141,13 @@ export default class Index extends React.Component {
       <div className="index">
         {/* 轮播图 */}
         <div className="swiper">
-        {
-          this.state.isSwiperLoaded?
-          <Carousel autoplay infinite>
-            {this.renderSwipers()}
-          </Carousel>
-          : ''
-        }
+          {
+            this.state.isSwiperLoaded ?
+              <Carousel autoplay infinite>
+                {this.renderSwipers()}
+              </Carousel>
+              : ''
+          }
           <Flex className="search-box">
             <Flex className="search">
               <div className="location" onClick={() => this.props.history.push('/citylist')}>
@@ -156,14 +155,14 @@ export default class Index extends React.Component {
                 <i className="iconfont icon-arrow" />
               </div>
               <div className="form" onClick={() => this.props.history.push('/search')}>
-                <i className="iconfont icon-search"/>
+                <i className="iconfont icon-search" />
                 <span className="text">请输入小区或地址</span>
               </div>
             </Flex>
-            <i className="iconfont icon-map" onClick={() => this.props.history.push('/map')}/>
+            <i className="iconfont icon-map" onClick={() => this.props.history.push('/map')} />
           </Flex>
         </div>
-        
+
         {/* 导航栏 */}
         <Flex className="nav">
           {this.renderNavs()}
@@ -179,7 +178,7 @@ export default class Index extends React.Component {
                 <p className="title">{item.title}</p>
                 <span className="info">{item.desc}</span>
               </div>
-              <img src={`http://118.190.160.53:8009${item.imgSrc}`} alt=""/>
+              <img src={`http://118.190.160.53:8009${item.imgSrc}`} alt="" />
             </Flex>
           )}></Grid>
         </div>
@@ -188,7 +187,7 @@ export default class Index extends React.Component {
           <h3 className="group-title">
             最新资讯
           </h3>
-          <WingBlank size="md">{this.renderNews()}</WingBlank> 
+          <WingBlank size="md">{this.renderNews()}</WingBlank>
         </div>
       </div>
     );

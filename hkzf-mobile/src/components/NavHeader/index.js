@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom'
 
 import styles from './index.module.css'
 import PropTypes from 'prop-types'
-console.log(styles)
 function NavHeader({ children, history, onLeftClick }) {
   const defaultHandler = () => history.go(-1)
   return (
