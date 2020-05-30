@@ -1,5 +1,8 @@
 import React from 'react'
-import {Route} from 'react-router-dom'
+import { Route } from 'react-router-dom'
+
+// 导入组件样式
+import './index.css'
 
 import Index from '../Index'
 import HouseList from '../HouseList'
@@ -7,8 +10,7 @@ import News from '../News'
 import Profile from '../Profile'
 
 import { TabBar } from 'antd-mobile'
-// 导入组件样式
-import './index.css'
+
 
 // TabBar 数据
 const TabItems = [
@@ -39,16 +41,16 @@ export default class Home extends React.Component {
     selectedTab: this.props.location.pathname, // 默认选中tab栏
   }
   // 渲染TabBar.Item
-  renderTabBarItem () {
+  renderTabBarItem() {
     return TabItems.map((item) => (
       <TabBar.Item
         title={item.title}
         key={item.path}
         icon={
-          <i className={`iconfont ${item.icon}`}/>
+          <i className={`iconfont ${item.icon}`} />
         }
         selectedIcon={
-          <i className={`iconfont ${item.icon}`}/>
+          <i className={`iconfont ${item.icon}`} />
         }
         selected={this.state.selectedTab === item.path}
         onPress={() => {
@@ -63,7 +65,7 @@ export default class Home extends React.Component {
     ))
   }
   // 监听路由变化
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (prevProps.location.pathname !== this.props.location.pathname) {
       // 路由发生切换
       this.setState({
@@ -71,7 +73,7 @@ export default class Home extends React.Component {
       })
     }
   }
-  render () {
+  render() {
     return (
       <div className="home">
         {/* 设置子路由 */}

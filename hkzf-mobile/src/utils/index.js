@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { BASE_URL } from './url'
 
 export const getCurrentCity = () => {
   const localCity = localStorage.getItem('hkzf_city')
@@ -7,7 +8,7 @@ export const getCurrentCity = () => {
       const curCity = new window.BMap.LocalCity()
       curCity.get(async res => {
         try {
-          const result = await axios.get(`http://118.190.160.53:8009/area/info?name=${res.name}`)
+          const result = await axios.get(`${BASE_URL}/area/info?name=${res.name}`)
           localStorage.setItem('hkzf_city', JSON.stringify(result.data.body))
           resolve(result.data.body)
         } catch (e) {

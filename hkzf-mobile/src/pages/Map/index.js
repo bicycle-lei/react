@@ -1,9 +1,10 @@
 import React from 'react'
 import NavHeader from '../../components/NavHeader'
 import styles from './index.module.css'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { Toast } from 'antd-mobile'
+import { BASE_URL } from '../../utils/url'
+import { API } from '../../utils/api'
 
 const labelStyle = {
   cursor: 'pointer',
@@ -49,7 +50,7 @@ export default class Map extends React.Component {
 
   async renderOverlays(id) {
     Toast.loading('加载中...', 0, null, false)
-    const res = await axios.get(`http://118.190.160.53:8009/area/map?id=${id}`)
+    const res = await API.get(`/area/map?id=${id}`)
     const data = res.data.body
     Toast.hide()
     const { nextZoom, type } = this.getTypeAndZoom()
@@ -123,7 +124,7 @@ export default class Map extends React.Component {
 
   async getHousesList(id) {
     Toast.loading('加载中...', 0, null, false)
-    const res = await axios.get(`http://118.190.160.53:8009/houses?cityId=${id}`)
+    const res = await API.get(`/houses?cityId=${id}`)
     Toast.hide()
     const data = res.data.body.list
     this.setState({
@@ -172,7 +173,7 @@ export default class Map extends React.Component {
               <div className={styles.imgWrap}>
                 <img
                   className={styles.img}
-                  src={`http://118.190.160.53:8009${item.houseImg}`}
+                  src={`${BASE_URL}${item.houseImg}`}
                   alt=""
                 />
               </div>

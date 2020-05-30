@@ -3,6 +3,8 @@ import { getCurrentCity } from "../../utils"
 // 导入组件
 import { Carousel, Flex, Grid, WingBlank } from 'antd-mobile'
 import axios from 'axios'
+import { BASE_URL } from '../../utils/url'
+import SearchHeader from '../../components/SearchHeader'
 
 // 导入图片
 import Nav1 from '../../assets/images/nav-1.png'
@@ -56,7 +58,7 @@ export default class Index extends React.Component {
   }
   // 轮播图出现问题是因为动态加载数据
   async getSwipers() {
-    const res = await axios.get('http://118.190.160.53:8009/home/swiper')
+    const res = await axios.get(`${BASE_URL}/home/swiper`)
     this.setState(() => {
       return {
         swipers: res.data.body,
@@ -65,7 +67,7 @@ export default class Index extends React.Component {
     })
   }
   async getGroups() {
-    const res = await axios.get('http://118.190.160.53:8009/home/groups?area=88cff55c-aaa4-e2e0')
+    const res = await axios.get(`${BASE_URL}/home/groups?area=88cff55c-aaa4-e2e0`)
     this.setState(() => {
       return {
         groups: res.data.body
@@ -73,7 +75,7 @@ export default class Index extends React.Component {
     })
   }
   async getNews() {
-    const res = await axios.get('http://118.190.160.53:8009/home/news?area=88cff55c-aaa4-e2e0')
+    const res = await axios.get(`${BASE_URL}/home/news?area=88cff55c-aaa4-e2e0`)
     this.setState(() => {
       return {
         news: res.data.body
@@ -102,7 +104,7 @@ export default class Index extends React.Component {
           height: '212px'
         }}
       >
-        <img src={`http://118.190.160.53:8009${item.imgSrc}`} alt="" style={{
+        <img src={`${BASE_URL}${item.imgSrc}`} alt="" style={{
           width: '100%',
           verticalAlign: 'top'
         }} />
@@ -123,7 +125,7 @@ export default class Index extends React.Component {
         <div className="imgwrap">
           <img
             className="img"
-            src={`http://118.190.160.53:8009${item.imgSrc}`}
+            src={`${BASE_URL}${item.imgSrc}`}
             alt="" />
         </div>
         <Flex className="content" direction="column" justify="between">
@@ -148,19 +150,7 @@ export default class Index extends React.Component {
               </Carousel>
               : ''
           }
-          <Flex className="search-box">
-            <Flex className="search">
-              <div className="location" onClick={() => this.props.history.push('/citylist')}>
-                <span className="name">{this.state.curCityName}</span>
-                <i className="iconfont icon-arrow" />
-              </div>
-              <div className="form" onClick={() => this.props.history.push('/search')}>
-                <i className="iconfont icon-search" />
-                <span className="text">请输入小区或地址</span>
-              </div>
-            </Flex>
-            <i className="iconfont icon-map" onClick={() => this.props.history.push('/map')} />
-          </Flex>
+          <SearchHeader cityName={this.state.curCityName} />
         </div>
 
         {/* 导航栏 */}
@@ -178,7 +168,7 @@ export default class Index extends React.Component {
                 <p className="title">{item.title}</p>
                 <span className="info">{item.desc}</span>
               </div>
-              <img src={`http://118.190.160.53:8009${item.imgSrc}`} alt="" />
+              <img src={`${BASE_URL}${item.imgSrc}`} alt="" />
             </Flex>
           )}></Grid>
         </div>

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { getCurrentCity } from "../../utils"
 import { List, AutoSizer } from 'react-virtualized'
 import NavHeader from '../../components/NavHeader'
-
+import { BASE_URL } from '../../utils/url'
 import styles from './index.module.css'
 const TITLE_HEIGHT = 36
 const NAME_HEIGHT = 50
@@ -59,8 +59,8 @@ export default class CityList extends React.Component {
   }
 
   async getCityList() {
-    const res = await axios.get('http://118.190.160.53:8009/area/city?level=1')
-    const res1 = await axios.get('http://118.190.160.53:8009/area/hot')
+    const res = await axios.get(`${BASE_URL}/area/city?level=1`)
+    const res1 = await axios.get(`${BASE_URL}/area/hot`)
     const { cityList, cityIndex } = formatCityDate(res.data.body)
     cityList['hot'] = res1.data.body
     cityIndex.unshift('hot')
