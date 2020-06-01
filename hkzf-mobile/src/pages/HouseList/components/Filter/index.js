@@ -14,11 +14,19 @@ const titleSelectedStatus = {
   more: false,
 }
 
+const selectedVlues = {
+  area: ['area', 'null'],
+  mode: ['null'],
+  price: ['null'],
+  more: []
+}
+
 export default class Filter extends Component {
   state = {
     titleSelectedStatus,
     openType: '',
-    filtersData: {}
+    filtersData: {},
+    selectedVlues
   }
 
   componentDidMount() {
@@ -34,13 +42,36 @@ export default class Filter extends Component {
   }
 
   onTitleClick = (type) => {
+    const { titleSelectedStatus, selectedVlues } = this.state
+
+    const newTitleSelectedStatus = {
+      ...titleSelectedStatus
+    }
+    // ['area', 'mode', 'price', 'more']
+    Object.keys(titleSelectedStatus).forEach(key => {
+      if (key === type) {
+        newTitleSelectedStatus[key] = true
+        return
+      }
+
+      const selectedVal = selectedVlues[key]
+
+      if (key === 'area' && (selectedVal.length !== 2 || selectedVal[0] !== 'area')) {
+        newTitleSelectedStatus[key] = true
+      } else if (key === 'mode' && selectedVal[0] !== 'null') {
+        newTitleSelectedStatus[key] = true
+      } else if (key === 'price' && selectedVal[0] !== 'null') {
+        newTitleSelectedStatus[key] = true
+      } else if (key === 'more') {
+
+      } else {
+        newTitleSelectedStatus[key] = false
+      }
+    })
     this.setState(prevState => {
       return {
         openType: type,
-        titleSelectedStatus: {
-          ...prevState.titleSelectedStatus,
-          [type]: true
-        }
+        titleSelectedStatus: { ...newTitleSelectedStatus }
       }
     })
   }
@@ -51,19 +82,26 @@ export default class Filter extends Component {
     })
   }
 
-  onSave = () => {
+  onSave = (type, value) => {
+
     this.setState({
-      openType: ''
+      openType: '',
+      selectedVlues: {
+        ...this.state.selectedVlues,
+        [type]: value
+      }
     })
   }
 
   renderFilterPicker = () => {
-    const { openType, filtersData: { area, subway, rentType, price } } = this.state
+    const { openType, filtersData: { area, subway, rentType, price }, selectedVlues } = this.state
     if (openType !== 'area' && openType !== 'mode' && openType !== 'price') {
       return null
     }
     let data = []
     let cols = 3
+    let defaultValue = selectedVlues[openType]
+
     switch (openType) {
       case 'area': data = [area, subway]
         break
@@ -80,9 +118,25 @@ export default class Filter extends Component {
     }
 
 
-    return <FilterPicker onCancel={this.onCancel} onSave={this.onSave} data={data} cols={cols} />
+    return <FilterPicker
+      key={openType}
+      onCancel={this.onCancel}
+      onSave={this.onSave}
+      data={data}
+      cols={cols}
+      type={openType}
+      defaultValue={defaultValue} />
   }
-
+  renderFilterMore() {
+    const { openType, filtersData: { roomType, oriented, floor, characteristic } } = this.state
+    const data = {
+      roomType,
+      oriented,
+      floor,
+      characteristic
+    }
+    return openType === 'more' ? <FilterMore data={data} /> : ''
+  }
   render() {
     const { titleSelectedStatus, openType } = this.state
     return (
@@ -100,7 +154,9 @@ export default class Filter extends Component {
             this.renderFilterPicker()
           }
           {/* 最后一个菜单对应的内容： */}
-          {/* <FilterMore /> */}
+          {
+            this.renderFilterMore()
+          }
         </div>
       </div>
     )
