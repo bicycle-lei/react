@@ -26,7 +26,7 @@ export default class Filter extends Component {
   }
 
   async getFilterData() {
-    const { value } = JSON.parse(localStorage.getItem('hkzf_city'))
+    const { value } = JSON.parse(localStorage.getItem('hkzf_city')) || {}
     const res = await API.get(`/houses/condition?id=${value}`)
     this.setState({
       filtersData: res.data.body

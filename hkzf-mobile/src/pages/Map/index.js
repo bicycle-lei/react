@@ -27,7 +27,7 @@ export default class Map extends React.Component {
     const map = new window.BMap.Map('container')
     var myGeo = new window.BMap.Geocoder()
     this.map = map
-    const { label, value } = JSON.parse(localStorage.getItem('hkzf_city'))
+    const { label, value } = JSON.parse(localStorage.getItem('hkzf_city')) || {}
 
     myGeo.getPoint(label, async point => {
       if (point) {
