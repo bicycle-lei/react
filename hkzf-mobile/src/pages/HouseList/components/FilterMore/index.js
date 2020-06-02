@@ -7,7 +7,7 @@ import styles from './index.module.css'
 export default class FilterMore extends Component {
 
   state = {
-    selectedValues: [],
+    selectedValues: this.props.defaultValue,
   }
   onTagClick(value) {
     const { selectedValues } = this.state
@@ -33,15 +33,25 @@ export default class FilterMore extends Component {
       )
     })
   }
-
+  onCancel = () => {
+    this.setState({
+      selectedValues: []
+    })
+  }
+  onOk = () => {
+    const { type, onSave } = this.props
+    onSave(type, this.state.selectedValues)
+  }
   render() {
     const {
-      data: { roomType, oriented, floor, characteristic }
+      data: { roomType, oriented, floor, characteristic },
+      onCancel,
+      type
     } = this.props
     return (
       <div className={styles.root}>
         {/* 遮罩层 */}
-        <div className={styles.mask} />
+        <div className={styles.mask} onClick={() => onCancel(type)} />
 
         {/* 条件内容 */}
         <div className={styles.tags}>
@@ -61,7 +71,7 @@ export default class FilterMore extends Component {
         </div>
 
         {/* 底部按钮 */}
-        <FilterFooter className={styles.footer} />
+        <FilterFooter className={styles.footer} cancelText="清除" onCancel={this.onCancel} onOk={this.onOk} />
       </div>
     )
   }

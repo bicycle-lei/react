@@ -62,8 +62,8 @@ export default class Filter extends Component {
         newTitleSelectedStatus[key] = true
       } else if (key === 'price' && selectedVal[0] !== 'null') {
         newTitleSelectedStatus[key] = true
-      } else if (key === 'more') {
-
+      } else if (key === 'more' && selectedVal.length !== 0) {
+        newTitleSelectedStatus[key] = true
       } else {
         newTitleSelectedStatus[key] = false
       }
@@ -76,20 +76,67 @@ export default class Filter extends Component {
     })
   }
 
-  onCancel = () => {
+  onCancel = (type) => {
+    const { titleSelectedStatus, selectedVlues } = this.state
+    const newTitleSelectedStatus = { ...titleSelectedStatus }
+    const value = selectedVlues[type]
+
+    if (type === 'area' && (value.length !== 2 || value[0] !== 'area')) {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'mode' && value[0] !== 'null') {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'price' && value[0] !== 'null') {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'more' && value.length !== 0) {
+      newTitleSelectedStatus[type] = true
+    } else {
+      newTitleSelectedStatus[type] = false
+    }
     this.setState({
+      titleSelectedStatus: { ...newTitleSelectedStatus },
       openType: ''
     })
   }
 
   onSave = (type, value) => {
+    const { titleSelectedStatus } = this.state
+    const newTitleSelectedStatus = { ...titleSelectedStatus }
 
+    if (type === 'area' && (value.length !== 2 || value[0] !== 'area')) {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'mode' && value[0] !== 'null') {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'price' && value[0] !== 'null') {
+      newTitleSelectedStatus[type] = true
+    } else if (type === 'more' && value.length !== 0) {
+      newTitleSelectedStatus[type] = true
+    } else {
+      newTitleSelectedStatus[type] = false
+    }
+
+    const newSelectedValues = {
+      ...this.state.selectedVlues,
+      [type]: value
+    }
+
+    const { area, mode, price, more } = newSelectedValues
+    const areaKey = area[0]
+    let areaValue = 'null'
+    if (area.length === 3) {
+      areaValue = area[2] !== 'null' ? area[2] : area[1]
+    }
+
+    const filters = {
+      [areaKey]: areaValue,
+      'mode': mode[0],
+      'price': price[0],
+      'more': more.join(',')
+    }
+    this.props.onFilter(filters)
     this.setState({
       openType: '',
-      selectedVlues: {
-        ...this.state.selectedVlues,
-        [type]: value
-      }
+      titleSelectedStatus: { ...newTitleSelectedStatus },
+      selectedVlues: newSelectedValues
     })
   }
 
@@ -128,14 +175,15 @@ export default class Filter extends Component {
       defaultValue={defaultValue} />
   }
   renderFilterMore() {
-    const { openType, filtersData: { roomType, oriented, floor, characteristic } } = this.state
+    const { openType, selectedVlues, filtersData: { roomType, oriented, floor, characteristic } } = this.state
     const data = {
       roomType,
       oriented,
       floor,
       characteristic
     }
-    return openType === 'more' ? <FilterMore data={data} /> : ''
+    let defaultValue = selectedVlues.more
+    return openType === 'more' ? <FilterMore data={data} type={openType} onSave={this.onSave} defaultValue={defaultValue} onCancel={this.onCancel} /> : ''
   }
   render() {
     const { titleSelectedStatus, openType } = this.state
@@ -144,7 +192,7 @@ export default class Filter extends Component {
         {/* 前三个菜单的遮罩层 */}
 
         {
-          (openType === 'area' || openType === 'mode' || openType === 'price') ? <div className={styles.mask} onClick={this.onCancel} /> : null
+          (openType === 'area' || openType === 'mode' || openType === 'price') ? <div className={styles.mask} onClick={() => this.onCancel(openType)} /> : null
         }
         <div className={styles.content}>
           {/* 标题栏 */}
