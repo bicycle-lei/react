@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { Toast } from 'antd-mobile'
 import { BASE_URL } from '../../utils/url'
 import { API } from '../../utils/api'
+import HouseItem from '../../components/HouseItem'
 
 const labelStyle = {
   cursor: 'pointer',
@@ -168,37 +169,20 @@ export default class Map extends React.Component {
         </div>
 
         <div className={styles.houseItems}>
-          {this.state.housesList.map(item => (
-            <div className={styles.house} key={item.houseCode}>
-              <div className={styles.imgWrap}>
-                <img
-                  className={styles.img}
-                  src={`${BASE_URL}${item.houseImg}`}
-                  alt=""
+          {
+            this.state.housesList.map((item) => {
+              return (
+                <HouseItem
+                  key={item.houseCode}
+                  src={BASE_URL + item.houseImg}
+                  title={item.title}
+                  desc={item.desc}
+                  tags={item.tags}
+                  price={item.price}
                 />
-              </div>
-              <div className={styles.content}>
-                <h3 className={styles.title}>{item.title}</h3>
-                <div className={styles.desc}>{item.desc}</div>
-                <div>
-                  {item.tags.map((tag, index) => {
-                    const tagClass = 'tag' + (index + 1)
-                    return (
-                      <span
-                        className={[styles.tag, styles[tagClass]].join(' ')}
-                        key={tag}
-                      >
-                        {tag}
-                      </span>
-                    )
-                  })}
-                </div>
-                <div className={styles.price}>
-                  <span className={styles.priceNum}>{item.price}</span> 元/月
-                  </div>
-              </div>
-            </div>
-          ))}
+              )
+            })
+          }
         </div>
       </div>
     )
