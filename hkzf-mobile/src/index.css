@@ -21,3 +21,7 @@ h1, h2, p , ul, dd{
 ul {
   list-style: none;
 }
+
+.body-fixed {
+  overflow: hidden;
+}

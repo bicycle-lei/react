@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import FilterTitle from '../FilterTitle'
 import FilterPicker from '../FilterPicker'
 import FilterMore from '../FilterMore'
-
+import { Spring } from 'react-spring/renderprops'
 import { API } from '../../../../utils/api'
 
 import styles from './index.module.css'
@@ -30,6 +30,8 @@ export default class Filter extends Component {
   }
 
   componentDidMount() {
+    this.htmlBody = document.body
+
     this.getFilterData()
   }
 
@@ -43,7 +45,7 @@ export default class Filter extends Component {
 
   onTitleClick = (type) => {
     const { titleSelectedStatus, selectedVlues } = this.state
-
+    this.htmlBody.className = 'body-fixed'
     const newTitleSelectedStatus = {
       ...titleSelectedStatus
     }
@@ -80,7 +82,7 @@ export default class Filter extends Component {
     const { titleSelectedStatus, selectedVlues } = this.state
     const newTitleSelectedStatus = { ...titleSelectedStatus }
     const value = selectedVlues[type]
-
+    this.htmlBody.className = ''
     if (type === 'area' && (value.length !== 2 || value[0] !== 'area')) {
       newTitleSelectedStatus[type] = true
     } else if (type === 'mode' && value[0] !== 'null') {
@@ -101,7 +103,7 @@ export default class Filter extends Component {
   onSave = (type, value) => {
     const { titleSelectedStatus } = this.state
     const newTitleSelectedStatus = { ...titleSelectedStatus }
-
+    this.htmlBody.className = ''
     if (type === 'area' && (value.length !== 2 || value[0] !== 'area')) {
       newTitleSelectedStatus[type] = true
     } else if (type === 'mode' && value[0] !== 'null') {
@@ -185,14 +187,32 @@ export default class Filter extends Component {
     let defaultValue = selectedVlues.more
     return openType === 'more' ? <FilterMore data={data} type={openType} onSave={this.onSave} defaultValue={defaultValue} onCancel={this.onCancel} /> : ''
   }
+  renderMask = () => {
+    const { openType } = this.state
+    const isHide = openType === 'more' || openType === ''
+    return (
+      <Spring
+        from={{ opacity: 0 }}
+        to={{ opacity: isHide ? 0 : 1 }}>
+        {props => {
+          if (props.opacity === 0) {
+            return null
+          } else {
+            return (<div style={props} className={styles.mask} onClick={() => this.onCancel(openType)} />)
+          }
+        }
+        }
+      </Spring>
+    )
+  }
   render() {
-    const { titleSelectedStatus, openType } = this.state
+    const { titleSelectedStatus } = this.state
     return (
       <div className={styles.root}>
         {/* 前三个菜单的遮罩层 */}
 
         {
-          (openType === 'area' || openType === 'mode' || openType === 'price') ? <div className={styles.mask} onClick={() => this.onCancel(openType)} /> : null
+          this.renderMask()
         }
         <div className={styles.content}>
           {/* 标题栏 */}

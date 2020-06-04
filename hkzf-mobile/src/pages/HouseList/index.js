@@ -8,33 +8,52 @@ import { API } from '../../utils/api'
 import Filter from './components/Filter'
 import { BASE_URL } from '../../utils/url'
 import Sticky from '../../components/Sticky'
+import NoHouse from '../../components/NoHouse'
+import { getCurrentCity } from '../../utils/index'
 // 获取当前定位城市信息
-const { label, value } = JSON.parse(localStorage.getItem('hkzf_city')) || {}
+// const { label, value } = JSON.parse(localStorage.getItem('hkzf_city')) || {}
 
 export default class HouseList extends React.Component {
   filters = {}
   state = {
     list: [],
-    count: 0
+    count: 0,
+    isLoading: false
   }
-  componentDidMount() {
+  label = ''
+  value = ''
+  async componentDidMount() {
+    const { label, value } = await getCurrentCity()
+    this.label = label
+    this.value = value
     this.searchHouseList()
   }
   onFilter = (filters) => {
     this.filters = filters
+    this.searchHouseList()
+    window.scrollTo(0, 0)
   }
   searchHouseList = async () => {
     Toast.loading('加载中...', 0, null, false)
+    this.setState({
+      isLoading: true
+    })
     const res = await API.get('/houses', {
       params: {
-        cityId: value,
+        cityId: this.value,
         ...this.filters,
         start: 1,
         end: 20
       }
     })
     Toast.hide()
+    this.setState({
+      isLoading: false
+    })
     const { list, count } = res.data.body
+    if (count !== 0) {
+      Toast.info(`共找到${count}套房源`, 2, null, false)
+    }
     this.setState({
       list: list,
       count: count
@@ -64,7 +83,7 @@ export default class HouseList extends React.Component {
     return new Promise(resolve => {
       API.get('/houses', {
         params: {
-          cityId: value,
+          cityId: this.value,
           ...this.filters,
           start: startIndex,
           end: stopIndex
@@ -77,50 +96,57 @@ export default class HouseList extends React.Component {
       })
     })
   }
+  renderList() {
+    const { count, isLoading } = this.state
+    if (count === 0 && !isLoading) {
+      return <NoHouse>没有找到房源，请您换个搜索条件吧~</NoHouse>
+    }
+
+    return (
+      <InfiniteLoader
+        isRowLoaded={this.isRowLoaded}
+        loadMoreRows={this.loadMoreRows}
+        rowCount={count}
+      >
+        {({ onRowsRendered, registerChild }) => (
+          <WindowScroller>
+            {({ height, isScrolling, scrollTop }) => (
+              <AutoSizer>
+                {({ width }) => (
+                  <List
+                    onRowsRendered={onRowsRendered}
+                    ref={registerChild}
+                    autoHeight
+                    width={width}
+                    height={height}
+                    rowCount={count}
+                    rowHeight={120}
+                    rowRenderer={this.renderHouseList}
+                    isScrolling={isScrolling}
+                    scrollTop={scrollTop}
+                  />
+                )}
+              </AutoSizer>
+            )}
+          </WindowScroller>
+        )}
+      </InfiniteLoader>
+    )
+  }
   render() {
-    const { count } = this.state
     return (
       <div>
         <Flex className={styles.header}>
           <i className="iconfont icon-back" onClick={() => this.props.history.go(-1)}></i>
-          <SearchHeader cityName={label || ''} className={styles.searchHeader} />
+          <SearchHeader cityName={this.label} className={styles.searchHeader} />
         </Flex>
         <Sticky height={40}>
           <Filter onFilter={this.onFilter} />
         </Sticky>
         <div className={styles.houseItems}>
-          <InfiniteLoader
-            isRowLoaded={this.isRowLoaded}
-            loadMoreRows={this.loadMoreRows}
-            rowCount={count}
-          >
-            {
-              ({ onRowsRendered, registerChild }) => (
-                <WindowScroller>
-                  {
-                    ({ height, isScrolling, scrollTop }) => (
-                      <AutoSizer>
-                        {({ width }) => (
-                          <List
-                            onRowsRendered={onRowsRendered}
-                            ref={registerChild}
-                            autoHeight // 渲染高度
-                            width={width}
-                            height={height} // 可视高度
-                            rowCount={count}
-                            rowHeight={120}
-                            rowRenderer={this.renderHouseList}
-                            isScrolling={isScrolling}
-                            scrollTop={scrollTop}
-                          />
-                        )}
-                      </AutoSizer>
-                    )
-                  }
-                </WindowScroller>
-              )
-            }
-          </InfiniteLoader>
+          {
+            this.renderList()
+          }
         </div>
       </div>
     )
