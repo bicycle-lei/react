@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { BrowserRouter as Router, Route, Redirect} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 
 // 导入首页和城市选择两个组件(页面)
 import Home from './pages/Home'
 import CityList from './pages/CityList'
 import Map from './pages/Map'
-
+import HouseDetail from './pages/HouseDetail'
 function App() {
   return (
     <Router>
@@ -19,8 +19,9 @@ function App() {
         <Route path="/home" component={Home}></Route>
         <Route path="/citylist" component={CityList}></Route>
         <Route path="/map" component={Map}></Route>
+        <Route path="/detail/:id" component={HouseDetail}></Route>
       </div>
-    </Router> 
+    </Router>
   );
 }
 
