@@ -8,6 +8,8 @@ import CityList from './pages/CityList'
 import Map from './pages/Map'
 import HouseDetail from './pages/HouseDetail'
 import Login from './pages/Login'
+import Profile from './pages/Profile'
+// import AuthRoute from './components/AuthRoute'
 function App() {
   return (
     <Router>
@@ -22,6 +24,9 @@ function App() {
         <Route path="/map" component={Map}></Route>
         <Route path="/detail/:id" component={HouseDetail}></Route>
         <Route path="/login" component={Login}></Route>
+        <Route path="/profile" component={Profile}></Route>
+        {/* <AuthRoute path="/profile" component={Profile}></AuthRoute> */}
+
       </div>
     </Router>
   );
