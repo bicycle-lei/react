@@ -23,7 +23,7 @@ const AuthRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={props => {
         const isLogin = isAuth()
-
+        console.log('是否登录：' + isLogin)
         if (isLogin) {
           // 已登录
           // 将 props 传递给组件，组件中才能获取到路由相关信息

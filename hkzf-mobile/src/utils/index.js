@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { BASE_URL } from './url'
-
+import { API } from './api'
+import { getCity, setCity } from './city'
 export const getCurrentCity = () => {
   const localCity = localStorage.getItem('hkzf_city')
   if (!localCity) {
@@ -19,3 +20,4 @@ export const getCurrentCity = () => {
   }
   return Promise.resolve(JSON.parse(localCity))
 }
+export { getCity, setCity, BASE_URL, API }

@@ -9,7 +9,10 @@ import Map from './pages/Map'
 import HouseDetail from './pages/HouseDetail'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
-// import AuthRoute from './components/AuthRoute'
+import Rent from './pages/Rent'
+import RentAdd from './pages/Rent/Add'
+import RentSearch from './pages/Rent/Search'
+import AuthRoute from './components/AuthRoute'
 function App() {
   return (
     <Router>
@@ -25,7 +28,9 @@ function App() {
         <Route path="/detail/:id" component={HouseDetail}></Route>
         <Route path="/login" component={Login}></Route>
         <Route path="/profile" component={Profile}></Route>
-        {/* <AuthRoute path="/profile" component={Profile}></AuthRoute> */}
+        <AuthRoute exact path="/rent" component={Rent}></AuthRoute>
+        <AuthRoute path="/rent/add" component={RentAdd}></AuthRoute>
+        <AuthRoute path="/rent/search" component={RentSearch}></AuthRoute>
 
       </div>
     </Router>

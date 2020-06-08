@@ -91,8 +91,12 @@ Login = withFormik({
 
     if (status === 200) {
       localStorage.setItem('hkzf_token', body.token)
-
-      props.history.go(-1)
+      console.log(props)
+      if (!props.location.state) {
+        props.history.go(-1)
+      } else {
+        props.history.replace(props.location.state.from.pachname)
+      }
     } else {
       Toast.info(description, 2, null, false)
     }

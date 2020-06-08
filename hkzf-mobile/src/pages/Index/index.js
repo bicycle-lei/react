@@ -33,13 +33,13 @@ const navs = [
     id: 3,
     img: Nav3,
     title: '地图找房',
-    path: '/home/list'
+    path: '/map'
   },
   {
     id: 4,
     img: Nav4,
     title: '去出租',
-    path: '/home/list'
+    path: '/rent/add'
   },
 ]
 // 获取地理位置信息
