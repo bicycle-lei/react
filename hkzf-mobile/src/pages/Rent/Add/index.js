@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import { API } from '../../../utils/api'
 import {
   Flex,
   List,
@@ -7,7 +7,8 @@ import {
   Picker,
   ImagePicker,
   TextareaItem,
-  Modal
+  Modal,
+  Toast
 } from 'antd-mobile'
 
 import NavHeader from '../../../components/NavHeader'
@@ -96,7 +97,47 @@ export default class RentAdd extends Component {
       }
     ])
   }
-
+  getValue = (name, value) => {
+    this.setState(
+      {
+        [name]: value
+      }
+    )
+  }
+  handleSupporting = (selected) => {
+    console.log(selected.join('|'))
+    this.setState({
+      supporting: selected.join('|')
+    })
+  }
+  handleHouseImg = (files, type, index) => {
+    this.setState({
+      tempSlides: files
+    })
+  }
+  addHouse = async () => {
+    const { tempSlides, title, description, oriented, supporting, price, roomType, size, community, floor } = this.state
+    let houseImg = ''
+    if (tempSlides.length > 0) {
+      const form = new FormData()
+      tempSlides.forEach((item) => form.append('file', item.file))
+      const res = await API.post('/houses/image', form, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      houseImg = res.data.body.join('|')
+    }
+    const res = await API.post('/user/houses', {
+      title, description, oriented, supporting, price, roomType, size, community: community.id, floor, houseImg
+    })
+    if (res.data.status === 200) {
+      Toast.info('发布成功', 1, null, false)
+      this.props.history.push('/rent')
+    } else {
+      Toast.info('发布失败', 2, null, false)
+    }
+  }
   render() {
     const Item = List.Item
     const { history } = this.props
@@ -108,7 +149,8 @@ export default class RentAdd extends Component {
       oriented,
       description,
       tempSlides,
-      title
+      title,
+      size
     } = this.state
 
     return (
@@ -128,22 +170,22 @@ export default class RentAdd extends Component {
           >
             小区名称
           </Item>
-          <InputItem placeholder="请输入租金/月" extra="￥/月" value={price}>
+          <InputItem placeholder="请输入租金/月" extra="￥/月" value={price} onChange={(val) => this.getValue('price', val)}>
             租&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金
           </InputItem>
-          <InputItem placeholder="请输入建筑面积" extra="㎡">
+          <InputItem placeholder="请输入建筑面积" extra="㎡" value={size} onChange={(val) => this.getValue('size', val)}>
             建筑面积
           </InputItem>
-          <Picker data={roomTypeData} value={[roomType]} cols={1}>
+          <Picker data={roomTypeData} value={[roomType]} cols={1} onChange={(val) => this.getValue('roomType', val[0])}>
             <Item arrow="horizontal">
               户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型
             </Item>
           </Picker>
 
-          <Picker data={floorData} value={[floor]} cols={1}>
+          <Picker data={floorData} value={[floor]} cols={1} onChange={(val) => this.getValue('floor', val[0])}>
             <Item arrow="horizontal">所在楼层</Item>
           </Picker>
-          <Picker data={orientedData} value={[oriented]} cols={1}>
+          <Picker data={orientedData} value={[oriented]} cols={1} onChange={(val) => this.getValue('oriented', val[0])}>
             <Item arrow="horizontal">
               朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向
             </Item>
@@ -158,6 +200,7 @@ export default class RentAdd extends Component {
           <InputItem
             placeholder="请输入标题（例如：整租 小区名 2室 5000元）"
             value={title}
+            onChange={(val) => this.getValue('title', val)}
           />
         </List>
 
@@ -170,6 +213,7 @@ export default class RentAdd extends Component {
             files={tempSlides}
             multiple={true}
             className={styles.imgpicker}
+            onChange={this.handleHouseImg}
           />
         </List>
 
@@ -178,7 +222,7 @@ export default class RentAdd extends Component {
           renderHeader={() => '房屋配置'}
           data-role="rent-list"
         >
-          <HousePackge select />
+          <HousePackge select onSelect={this.handleSupporting} />
         </List>
 
         <List
@@ -191,6 +235,7 @@ export default class RentAdd extends Component {
             placeholder="请输入房屋描述信息"
             autoHeight
             value={description}
+            onChange={(val) => this.getValue('description', val)}
           />
         </List>
 
